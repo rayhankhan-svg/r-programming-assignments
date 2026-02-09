@@ -77,3 +77,54 @@ A discussion of the results, including a comparison of polling data and a reflec
 
 https://rayhankhanlis4730.blogspot.com/2026/02/module-3-assignment.html
 
+## Module 4 Assignment – Hospital Patient Data Analysis
+
+This repository contains the R code for Module #4, which involves analyzing hospital patient data using boxplots and histograms.
+
+R Code:
+
+> # Create the data vectors
+> Frequency <- c(0.6, 0.3, 0.4, 0.4, 0.2, 0.6, 0.3, 0.4, 0.9, 0.2)
+> 
+> BloodPressure <- c(103, 87, 32, 42, 59, 109, 78, 205, 135, 176)
+> 
+> First <- c("bad", "bad", "bad", "bad", "good", "good", "good", "good", NA, "bad")
+> 
+> Second <- c("low", "low", "high", "high", "low", "low", "high", "high", "high", "high")
+> 
+> FinalDecision <- c("low", "high", "low", "high", "low", "high", "low", "high", "high", "high")
+> 
+> # Create data frame
+> hospital_data <- data.frame(Frequency, BloodPressure, First, Second, FinalDecision)
+> 
+> hospital_data
+   Frequency BloodPressure First Second FinalDecision
+1        0.6           103   bad    low           low
+2        0.3            87   bad    low          high
+3        0.4            32   bad   high           low
+4        0.4            42   bad   high          high
+5        0.2            59  good    low           low
+6        0.6           109  good    low          high
+7        0.3            78  good   high           low
+8        0.4           205  good   high          high
+9        0.9           135  <NA>   high          high
+10       0.2           176   bad   high          high
+> 
+> 
+> # Create boxplot of Blood Pressure
+> boxplot(BloodPressure,
++         main="Boxplot of Patient Blood Pressure",
++         ylab="Blood Pressure",
++         col="lightblue")
+> 
+> 
+> # Create histogram of Blood Pressure
+> hist(BloodPressure,
++      main="Histogram of Patient Blood Pressure",
++      xlab="Blood Pressure",
++      col="lightgreen")
+> 
+Blog Post:
+
+https://rayhankhanlis4730.blogspot.com/2026/02/module-4-programming-structure.html
+
