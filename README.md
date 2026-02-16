@@ -128,3 +128,46 @@ Blog Post:
 
 https://rayhankhanlis4730.blogspot.com/2026/02/module-4-programming-structure.html
 
+## Module 5 Assignment – Doing Math
+
+This repository contains the R code for Module #5, which focuses on working with matrices, determinants, and matrix inverses in R.
+
+Blog link:
+https://rayhankhanlis4730.blogspot.com/2026/02/module-5-doing-math.html
+
+R Code:
+
+> # Create matrices
+> A <- matrix(1:100, nrow=10)
+> B <- matrix(1:1000, nrow=10)
+> 
+> # Check dimensions
+> dim(A)
+[1] 10 10
+> dim(B)
+[1]  10 100
+> 
+> # Determinants
+> detA <- det(A)
+> detA
+[1] 0
+> 
+> # Inverses
+> invA <- tryCatch(solve(A), error=function(e) e)
+> invB <- tryCatch(solve(B), error=function(e) e)
+> 
+> invA
+<simpleError in solve.default(A): Lapack routine dgesv: system is exactly singular: U[3,3] = 0>
+> invB
+<simpleError in solve.default(B): 'a' (10 x 100) must be square>
+> 
+> # Determinant of B
+> detB <- tryCatch(det(B), error=function(e) e)
+> detB
+<simpleError in determinant.matrix(x, logarithm = TRUE, ...): 'x' must be a square matrix>
+
+Explanation:
+
+I made two matrices in R for Module #5:
+A <- matrix(1:100, nrow=10) and B <- matrix(1:1000, nrow=10).
+I verified that A and B are 10x10 square and 10x100 non-square matrices, respectively, using dim(). I then used det(A) to determine the determinant of A. The outcome was zero, indicating that A is a singular matrix without an inverse. R gave me an error stating that the matrix is singular (not invertible) when I tried to compute the inverse using solve(A). Since determinants and inverses are only defined for square matrices, det(B) and solve(B) failed for matrix B since B is not square.
