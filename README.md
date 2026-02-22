@@ -171,3 +171,66 @@ Explanation:
 I made two matrices in R for Module #5:
 A <- matrix(1:100, nrow=10) and B <- matrix(1:1000, nrow=10).
 I verified that A and B are 10x10 square and 10x100 non-square matrices, respectively, using dim(). I then used det(A) to determine the determinant of A. The outcome was zero, indicating that A is a singular matrix without an inverse. R gave me an error stating that the matrix is singular (not invertible) when I tried to compute the inverse using solve(A). Since determinants and inverses are only defined for square matrices, det(B) and solve(B) failed for matrix B since B is not square.
+
+## Module 6 Assignment – Doing Math in R (Part 2)
+
+This repository contains the R code for Module #6, which focuses on matrix operations, use of the diag() function, and structured matrix construction in R.
+
+Blog link:
+https://rayhankhanlis4730.blogspot.com/2026/02/module-6-doing-math-in-r-part-2.html
+
+R Code:
+
+> # 1) Matrices A and B
+> A <- matrix(c(2,0,1,3), ncol=2)
+> B <- matrix(c(5,2,4,-1), ncol=2)
+> 
+> A
+     [,1] [,2]
+[1,]    2    1
+[2,]    0    3
+> B
+     [,1] [,2]
+[1,]    5    4
+[2,]    2   -1
+> 
+> # a) A + B
+> A_plus_B <- A + B
+> A_plus_B
+     [,1] [,2]
+[1,]    7    5
+[2,]    2    2
+> 
+> # b) A - B
+> A_minus_B <- A - B
+> A_minus_B
+     [,1] [,2]
+[1,]   -3   -3
+[2,]   -2    4
+> 
+> 
+> # 2) diag() matrix size 4 with diagonal values 4,1,2,3
+> D <- diag(c(4,1,2,3))
+> D
+     [,1] [,2] [,3] [,4]
+[1,]    4    0    0    0
+[2,]    0    1    0    0
+[3,]    0    0    2    0
+[4,]    0    0    0    3
+> 
+> 
+> # 3) Generate the 5x5 matrix using diag()
+> M <- diag(3, 5)      # start with 3s on the diagonal
+> M[1, 2:5] <- 1       # first row (cols 2-5) become 1
+> M[2:5, 1] <- 2       # first column (rows 2-5) become 2
+> M
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    3    1    1    1    1
+[2,]    2    3    0    0    0
+[3,]    2    0    3    0    0
+[4,]    2    0    0    3    0
+[5,]    2    0    0    0    3
+
+Explanation:
+
+I made two 2x2 matrices, A and B, in R for Module #6, and then used fundamental matrix operations to get A + B and A - B. As long as the dimensions of the matrices are the same, R can add and remove them element by element. My A + B and A - B outputs were in line with the anticipated element-wise computations. I then created a 4x4 matrix with diagonal values of 4, 1, 2, and 3 using the diag() method. Lastly, I used diag() to create the necessary 5x5 matrix by first creating a diagonal matrix of 3s and then changing the first row and first column to fit the assignment's pattern. This demonstrated how diag() may be used to quickly create organized matrices and then modify particular rows and columns.
