@@ -234,3 +234,134 @@ R Code:
 Explanation:
 
 I made two 2x2 matrices, A and B, in R for Module #6, and then used fundamental matrix operations to get A + B and A - B. As long as the dimensions of the matrices are the same, R can add and remove them element by element. My A + B and A - B outputs were in line with the anticipated element-wise computations. I then created a 4x4 matrix with diagonal values of 4, 1, 2, and 3 using the diag() method. Lastly, I used diag() to create the necessary 5x5 matrix by first creating a diagonal matrix of 3s and then changing the first row and first column to fit the assignment's pattern. This demonstrated how diag() may be used to quickly create organized matrices and then modify particular rows and columns.
+
+
+## Module 7 Assignment – R Objects: S3 vs S4
+
+This repository contains the R code for Module #7, which uses the mtcars dataset to explore generic functions and compares S3 vs S4 object systems in R.
+
+Blog Link: https://rayhankhanlis4730.blogspot.com/2026/03/module-7-r-object-s3-vs-s4-assignment.html
+
+R Code:
+> # Step 1: Load a dataset
+> data(mtcars)
+> head(mtcars, 6)
+                   mpg cyl disp  hp drat    wt  qsec vs am
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0
+                  gear carb
+Mazda RX4            4    4
+Mazda RX4 Wag        4    4
+Datsun 710           4    1
+Hornet 4 Drive       3    1
+Hornet Sportabout    3    2
+Valiant              3    1
+> 
+> # Step 2: Check if generic functions can be used on this dataset
+> class(mtcars)
+[1] "data.frame"
+> typeof(mtcars)
+[1] "list"
+> isS4(mtcars)
+[1] FALSE
+> 
+> # Generic functions examples
+> summary(mtcars)
+      mpg             cyl             disp      
+ Min.   :10.40   Min.   :4.000   Min.   : 71.1  
+ 1st Qu.:15.43   1st Qu.:4.000   1st Qu.:120.8  
+ Median :19.20   Median :6.000   Median :196.3  
+ Mean   :20.09   Mean   :6.188   Mean   :230.7  
+ 3rd Qu.:22.80   3rd Qu.:8.000   3rd Qu.:326.0  
+ Max.   :33.90   Max.   :8.000   Max.   :472.0  
+       hp             drat             wt       
+ Min.   : 52.0   Min.   :2.760   Min.   :1.513  
+ 1st Qu.: 96.5   1st Qu.:3.080   1st Qu.:2.581  
+ Median :123.0   Median :3.695   Median :3.325  
+ Mean   :146.7   Mean   :3.597   Mean   :3.217  
+ 3rd Qu.:180.0   3rd Qu.:3.920   3rd Qu.:3.610  
+ Max.   :335.0   Max.   :4.930   Max.   :5.424  
+      qsec             vs               am        
+ Min.   :14.50   Min.   :0.0000   Min.   :0.0000  
+ 1st Qu.:16.89   1st Qu.:0.0000   1st Qu.:0.0000  
+ Median :17.71   Median :0.0000   Median :0.0000  
+ Mean   :17.85   Mean   :0.4375   Mean   :0.4062  
+ 3rd Qu.:18.90   3rd Qu.:1.0000   3rd Qu.:1.0000  
+ Max.   :22.90   Max.   :1.0000   Max.   :1.0000  
+      gear            carb      
+ Min.   :3.000   Min.   :1.000  
+ 1st Qu.:3.000   1st Qu.:2.000  
+ Median :4.000   Median :2.000  
+ Mean   :3.688   Mean   :2.812  
+ 3rd Qu.:4.000   3rd Qu.:4.000  
+ Max.   :5.000   Max.   :8.000  
+> plot(mtcars$mpg, mtcars$hp)
+> 
+> # What is a generic function?
+> mean
+function (x, ...) 
+UseMethod("mean")
+<bytecode: 0xa155718f8>
+<environment: namespace:base>
+> 
+> # Step 3: Create an S3 example
+> 
+> s3 <- list(name = "Myself", age = 29, GPA = 3.5)
+> class(s3) <- "student"
+> 
+> s3
+$name
+[1] "Myself"
+
+$age
+[1] 29
+
+$GPA
+[1] 3.5
+
+attr(,"class")
+[1] "student"
+> class(s3)
+[1] "student"
+> typeof(s3)
+[1] "list"
+> isS4(s3)
+[1] FALSE
+> 
+> # Step 4: Create an S4 example
+> 
+> setClass("student",
++          slots = list(
++            name = "character",
++            age  = "numeric",
++            GPA  = "numeric"
++          ))
+> 
+> s4 <- new("student", name = "Myself", age = 29, GPA = 3.5)
+> 
+> s4
+An object of class "student"
+Slot "name":
+[1] "Myself"
+
+Slot "age":
+[1] 29
+
+Slot "GPA":
+[1] 3.5
+
+> class(s4)
+[1] "student"
+attr(,"package")
+[1] ".GlobalEnv"
+> typeof(s4)
+[1] "S4"
+> isS4(s4)
+[1] TRUE
+
+Explanation: 
+I utilized R's built-in mtcars dataset for Module #7. Since class(mtcars) returns "data.frame" and isS4(mtcars) returns FALSE, I was able to verify that mtcars is an S3 object. Additionally, I used typeof(mtcars) to verify its base type, and it returned "list". I next evaluated the dataset's suitability for generic functions. Because they employ method dispatch, generic methods like summary() and plot() are compatible with mtcars. For instance, the function summary.data.frame() is called by summary(mtcars). A generic function is one that, depending on the object's class, chooses the appropriate method; in R, many generics display UseMethod() when printed. Lastly, I produced S3 and S4 samples. In S3, I used a list to create a student object, and then I gave it a class attribute (class(s3) <- "student"). I used setClass() with slots to explicitly define a student class for S4, and I then used new() to construct an instance. The primary distinction is that S4 is formal, has predetermined slots, and enforces a more rigid structure, whereas S3 is informal and flexible.
