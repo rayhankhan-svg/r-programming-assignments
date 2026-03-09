@@ -365,3 +365,278 @@ attr(,"package")
 
 Explanation: 
 I utilized R's built-in mtcars dataset for Module #7. Since class(mtcars) returns "data.frame" and isS4(mtcars) returns FALSE, I was able to verify that mtcars is an S3 object. Additionally, I used typeof(mtcars) to verify its base type, and it returned "list". I next evaluated the dataset's suitability for generic functions. Because they employ method dispatch, generic methods like summary() and plot() are compatible with mtcars. For instance, the function summary.data.frame() is called by summary(mtcars). A generic function is one that, depending on the object's class, chooses the appropriate method; in R, many generics display UseMethod() when printed. Lastly, I produced S3 and S4 samples. In S3, I used a list to create a student object, and then I gave it a class attribute (class(s3) <- "student"). I used setClass() with slots to explicitly define a student class for S4, and I then used new() to construct an instance. The primary distinction is that S4 is formal, has predetermined slots, and enforces a more rigid structure, whereas S3 is informal and flexible.
+
+
+## Module 8 Assignment – Input/Output, String Manipulation, and plyr
+
+This repository contains the R code for Module #8, which focuses on importing a dataset, using the plyr package to calculate grouped averages, filtering names with a string condition, and writing results to files.
+
+Blog Link: https://rayhankhanlis4370.blogspot.com/2026/03/module-8-inputoutput-string.html
+
+R Code:
+> # Step 1: Import dataset
+
+> x <- read.table(file.choose(), header = TRUE, sep = ",")
+
+> 
+
+> # View dataset
+
+> x
+
+        Name Age    Sex Grade
+
+1       Raul  25   Male    80
+
+2     Booker  18   Male    83
+
+3      Lauri  21 Female    90
+
+4     Leonie  21 Female    91
+
+5    Sherlyn  22 Female    85
+
+6    Mikaela  20 Female    69
+
+7    Raphael  23   Male    91
+
+8       Aiko  24 Female    97
+
+9   Tiffaney  21 Female    78
+
+10    Corina  23 Female    81
+
+11 Petronila  23 Female    98
+
+12    Alecia  20 Female    87
+
+13   Shemika  23 Female    97
+
+14    Fallon  22 Female    90
+
+15   Deloris  21 Female    67
+
+16    Randee  23 Female    91
+
+17     Eboni  20 Female    84
+
+18   Delfina  19 Female    93
+
+19 Ernestina  19 Female    93
+
+20      Milo  19   Male    67
+
+> 
+
+> # Step 2: Install/load plyr and calculate mean Grade by Sex
+
+> install.packages("plyr")
+
+trying URL 'https://cran.rstudio.com/bin/macosx/big-sur-arm64/contrib/4.5/plyr_1.8.9.tgz'
+
+Content type 'application/x-gzip' length 984753 bytes (961 KB)
+
+==================================================
+
+downloaded 961 KB
+
+
+
+
+
+The downloaded binary packages are in
+
+	/var/folders/3k/3m0n90_x4pj426bkxvf2p01h0000gn/T//RtmpFal0Bh/downloaded_packages
+
+> library(plyr)
+
+> 
+
+> y <- ddply(x, "Sex", transform, Grade.Average = mean(Grade))
+
+> 
+
+> # View result
+
+> y
+
+        Name Age    Sex Grade Grade.Average
+
+1      Lauri  21 Female    90       86.9375
+
+2     Leonie  21 Female    91       86.9375
+
+3    Sherlyn  22 Female    85       86.9375
+
+4    Mikaela  20 Female    69       86.9375
+
+5       Aiko  24 Female    97       86.9375
+
+6   Tiffaney  21 Female    78       86.9375
+
+7     Corina  23 Female    81       86.9375
+
+8  Petronila  23 Female    98       86.9375
+
+9     Alecia  20 Female    87       86.9375
+
+10   Shemika  23 Female    97       86.9375
+
+11    Fallon  22 Female    90       86.9375
+
+12   Deloris  21 Female    67       86.9375
+
+13    Randee  23 Female    91       86.9375
+
+14     Eboni  20 Female    84       86.9375
+
+15   Delfina  19 Female    93       86.9375
+
+16 Ernestina  19 Female    93       86.9375
+
+17      Raul  25   Male    80       80.2500
+
+18    Booker  18   Male    83       80.2500
+
+19   Raphael  23   Male    91       80.2500
+
+20      Milo  19   Male    67       80.2500
+
+> 
+
+> # Step 3: Write the mean result to a CSV-style file
+
+> write.table(y, "Sorted_Average", sep = ",", row.names = FALSE)
+
+> 
+
+> # Step 4: Filter names containing the letter i or I
+
+> newx <- subset(x, grepl("[iI]", x$Name))
+
+> 
+
+> # View filtered dataset
+
+> newx
+
+        Name Age    Sex Grade
+
+3      Lauri  21 Female    90
+
+4     Leonie  21 Female    91
+
+6    Mikaela  20 Female    69
+
+8       Aiko  24 Female    97
+
+9   Tiffaney  21 Female    78
+
+10    Corina  23 Female    81
+
+11 Petronila  23 Female    98
+
+12    Alecia  20 Female    87
+
+13   Shemika  23 Female    97
+
+15   Deloris  21 Female    67
+
+17     Eboni  20 Female    84
+
+18   Delfina  19 Female    93
+
+19 Ernestina  19 Female    93
+
+20      Milo  19   Male    67
+
+> 
+
+> # Step 5: Write the filtered subset to a CSV-style file
+
+> write.table(newx, "DataSubset", sep = ",", row.names = FALSE)
+
+> 
+
+
+
+Sorted_Average:
+
+"Name","Age","Sex","Grade","Grade.Average"
+
+"Lauri",21,"Female",90,86.9375
+
+"Leonie",21,"Female",91,86.9375
+
+"Sherlyn",22,"Female",85,86.9375
+
+"Mikaela",20,"Female",69,86.9375
+
+"Aiko",24,"Female",97,86.9375
+
+"Tiffaney",21,"Female",78,86.9375
+
+"Corina",23,"Female",81,86.9375
+
+"Petronila",23,"Female",98,86.9375
+
+"Alecia",20,"Female",87,86.9375
+
+"Shemika",23,"Female",97,86.9375
+
+"Fallon",22,"Female",90,86.9375
+
+"Deloris",21,"Female",67,86.9375
+
+"Randee",23,"Female",91,86.9375
+
+"Eboni",20,"Female",84,86.9375
+
+"Delfina",19,"Female",93,86.9375
+
+"Ernestina",19,"Female",93,86.9375
+
+"Raul",25,"Male",80,80.25
+
+"Booker",18,"Male",83,80.25
+
+"Raphael",23,"Male",91,80.25
+
+"Milo",19,"Male",67,80.25
+
+
+
+DataSubset:
+
+"Name","Age","Sex","Grade"
+
+"Lauri",21,"Female",90
+
+"Leonie",21,"Female",91
+
+"Mikaela",20,"Female",69
+
+"Aiko",24,"Female",97
+
+"Tiffaney",21,"Female",78
+
+"Corina",23,"Female",81
+
+"Petronila",23,"Female",98
+
+"Alecia",20,"Female",87
+
+"Shemika",23,"Female",97
+
+"Deloris",21,"Female",67
+
+"Eboni",20,"Female",84
+
+"Delfina",19,"Female",93
+
+"Ernestina",19,"Female",93
+
+"Milo",19,"Male",67
+
+Explanation: 
+In order to get the mean grade for Module #8, I imported the Assignment 6 dataset into R and used the plyr tool using Sex as the category. After dividing the data by sex using the ddply() function, I created a new variable named Grade. I used the Grade column's mean to calculate the average. The average grade for female students was 86.9375, while the average grade for male students was 80.25, according to the data. I then used write.table() with comma separation to write this output to a file. I then created a new subset of the original dataset by filtering it so that only names with the letter i (including uppercase I) were included. To get those names, I used subset() in conjunction with grepl ("[iI]", x$Name). Students like Lauri, Leonie, Mikaela, Aiko, Corina, Petronila, Alecia, Shemika, Deloris, Eboni, Delfina, Ernestina, and Milo were included in the smaller dataset that resulted from this. Lastly, I created a second CSV-style file with this filtered subset. This assignment helped me practice importing data, using plyr to summarize grouped information, working with string matching, and exporting results to files.
