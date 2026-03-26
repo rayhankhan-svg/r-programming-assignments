@@ -640,3 +640,72 @@ DataSubset:
 
 Explanation: 
 In order to get the mean grade for Module #8, I imported the Assignment 6 dataset into R and used the plyr tool using Sex as the category. After dividing the data by sex using the ddply() function, I created a new variable named Grade. I used the Grade column's mean to calculate the average. The average grade for female students was 86.9375, while the average grade for male students was 80.25, according to the data. I then used write.table() with comma separation to write this output to a file. I then created a new subset of the original dataset by filtering it so that only names with the letter i (including uppercase I) were included. To get those names, I used subset() in conjunction with grepl ("[iI]", x$Name). Students like Lauri, Leonie, Mikaela, Aiko, Corina, Petronila, Alecia, Shemika, Deloris, Eboni, Delfina, Ernestina, and Milo were included in the smaller dataset that resulted from this. Lastly, I created a second CSV-style file with this filtered subset. This assignment helped me practice importing data, using plyr to summarize grouped information, working with string matching, and exporting results to files.
+
+
+## Module 9 Assignment – Visualization in R
+
+This repository contains the R code for Module #9, which compares base graphics, lattice, and ggplot2 using the BankWages dataset.
+
+Blog Post: https://rayhankhanlis4370.blogspot.com/2026/03/assignment-9-visualization-in-r-base.html
+
+R Code:
+
+> data <- read.csv(file.choose(), stringsAsFactors = FALSE)
+> 
+> head(data)
+  rownames    job education gender minority
+1        1 manage        15   male       no
+2        2  admin        16   male       no
+3        3  admin        12 female       no
+4        4  admin         8 female       no
+5        5  admin        15   male       no
+6        6  admin        15   male       no
+> str(data)
+'data.frame':	474 obs. of  5 variables:
+ $ rownames : int  1 2 3 4 5 6 7 8 9 10 ...
+ $ job      : chr  "manage" "admin" "admin" "admin" ...
+ $ education: int  15 16 12 8 15 15 15 12 15 12 ...
+ $ gender   : chr  "male" "male" "female" "female" ...
+ $ minority : chr  "no" "no" "no" "no" ...
+> 
+> data$rownames <- as.numeric(data$rownames)
+> data$education <- as.numeric(data$education)
+> 
+> plot(data$rownames, data$education,
++      main = "Base: Education by Observation",
++      xlab = "Observation",
++      ylab = "Education",
++      col = "blue")
+> 
+> hist(data$education,
++      main = "Base: Distribution of Education",
++      xlab = "Education",
++      col = "lightgreen")
+> 
+> library(lattice)
+> 
+> xyplot(education ~ rownames | gender,
++        data = data,
++        main = "Lattice: Education by Observation and Gender")
+> 
+> bwplot(education ~ job,
++        data = data,
++        main = "Lattice: Education by Job Type")
+> 
+> library(ggplot2)
+> 
+> ggplot(data, aes(x = rownames, y = education, color = gender)) +
++   geom_point() +
++   geom_smooth(method = "lm") +
++   labs(title = "ggplot2: Education by Observation with Trend")
+`geom_smooth()` using formula = 'y ~ x'
+> 
+> ggplot(data, aes(x = education)) +
++   geom_histogram(binwidth = 1, fill = "blue") +
++   facet_wrap(~ job) +
++   labs(title = "ggplot2: Education Distribution by Job Type")
+> 
+
+Explanation:
+
+For Module #9, I compared three R visualization systems, base graphics, lattice, and ggplot2, using the BankWages dataset. I chose education as the primary numerical variable for visualization because the dataset includes variables such as rownames, jobs, education, and gender. I produced a scatter plot of education by observation number and a histogram illustrating the distribution of education using base R graphics. Although base visuals were simple and easy to use, each plot element had to be manually specified. Despite being straightforward, after the plot is established, they become less adaptable. I used bwplot() to compare education across job categories and xyplot() to show education by observation conditioned on gender using lattice graphics. Lattice improves cross-category comparison by making it simpler to work with grouped data and producing multi-panel charts automatically. Lastly, I made a scatter plot using ggplot2 that included a faceted histogram per job type and a regression line. Plot customization and extension are made easier by ggplot2's tiered architecture. In comparison to the other systems, it also generated graphics that were the clearest and most aesthetically pleasing. Lattice worked well for grouped and panel data, Base R was the most straightforward, and ggplot2 offered the greatest flexibility and high-quality visuals. The primary difficulty was adjusting to the various syntactic styles that each system employed.
