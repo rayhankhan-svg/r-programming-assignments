@@ -709,3 +709,68 @@ R Code:
 Explanation:
 
 For Module #9, I compared three R visualization systems, base graphics, lattice, and ggplot2, using the BankWages dataset. I chose education as the primary numerical variable for visualization because the dataset includes variables such as rownames, jobs, education, and gender. I produced a scatter plot of education by observation number and a histogram illustrating the distribution of education using base R graphics. Although base visuals were simple and easy to use, each plot element had to be manually specified. Despite being straightforward, after the plot is established, they become less adaptable. I used bwplot() to compare education across job categories and xyplot() to show education by observation conditioned on gender using lattice graphics. Lattice improves cross-category comparison by making it simpler to work with grouped data and producing multi-panel charts automatically. Lastly, I made a scatter plot using ggplot2 that included a faceted histogram per job type and a regression line. Plot customization and extension are made easier by ggplot2's tiered architecture. In comparison to the other systems, it also generated graphics that were the clearest and most aesthetically pleasing. Lattice worked well for grouped and panel data, Base R was the most straightforward, and ggplot2 offered the greatest flexibility and high-quality visuals. The primary difficulty was adjusting to the various syntactic styles that each system employed.
+
+
+## Module 11 Assignment – Debugging and Defensive Programming in R
+
+This repository contains the corrected R code for Module #11, which focuses on debugging a logical error in a function that identifies Tukey outliers across matrix columns.
+
+Blog Post: https://rayhankhanlis4370.blogspot.com/2026/04/assignment-11-debugging-and-defensive.html
+
+R Code:
+
+> tukey.outlier <- function(x, k = 1.5) {
++   q1 <- quantile(x, 0.25, na.rm = TRUE)
++   q3 <- quantile(x, 0.75, na.rm = TRUE)
++   iqr <- q3 - q1
++   x < (q1 - k * iqr) | x > (q3 + k * iqr)
++ }
+> 
+> tukey_multiple <- function(x) {
++   outliers <- array(TRUE, dim = dim(x))
++   for (j in 1:ncol(x)) {
++     outliers[, j] <- outliers[, j] & tukey.outlier(x[, j])
++   }
++   outlier.vec <- vector("logical", length = nrow(x))
++   for (i in 1:nrow(x)) {
++     outlier.vec[i] <- all(outliers[i, ])
++   }
++   return(outlier.vec)
++ }
+> 
+> set.seed(123)
+> test_mat <- matrix(rnorm(50), nrow = 10)
+> 
+> tukey_multiple(test_mat)
+ [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[10] FALSE
+> 
+> corrected_tukey <- function(x) {
++   if (!is.matrix(x)) {
++     stop("x must be a matrix.")
++   }
++   if (!is.numeric(x)) {
++     stop("x must be a numeric matrix.")
++   }
++   
++   outliers <- array(TRUE, dim = dim(x))
++   for (j in seq_len(ncol(x))) {
++     outliers[, j] <- outliers[, j] & tukey.outlier(x[, j])
++   }
++   
++   outlier.vec <- logical(nrow(x))
++   for (i in seq_len(nrow(x))) {
++     outlier.vec[i] <- all(outliers[i, ])
++   }
++   
++   outlier.vec
++ }
+> 
+> corrected_tukey(test_mat)
+ [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[10] FALSE
+> 
+
+Explanation:
+
+I used the test matrix included in the assignment to replicate the error in the tukey_multiple() function for Module #11. A warning notice stating that a logical vector of length higher than 1 was being forced to logical(1) appeared when I executed the original function. This showed that the code was utilizing the incorrect kind of logical operator within the loop. The line that updates the outliers matrix contained a problem since it used && rather than &. This function requires an element-wise comparison over all rows in a column, whereas the operator && just evaluates the first element of a logical vector. because Tukey's full logical vectors were being used by the function.The use of && in outlier() was wrong and resulted in warnings. I fixed the code by substituting &, which applies the logical operation element by element, for &&. This modification resulted in an error-free logical vector of length 10 being returned by the repaired function. To ensure that the input x is both a matrix and a number, I additionally included defensive checks at the top of the function. This assignment demonstrated how defensive programming can stop abuse and how minor logical operator errors can disrupt vectorized programs in R.
