@@ -774,3 +774,18 @@ R Code:
 Explanation:
 
 I used the test matrix included in the assignment to replicate the error in the tukey_multiple() function for Module #11. A warning notice stating that a logical vector of length higher than 1 was being forced to logical(1) appeared when I executed the original function. This showed that the code was utilizing the incorrect kind of logical operator within the loop. The line that updates the outliers matrix contained a problem since it used && rather than &. This function requires an element-wise comparison over all rows in a column, whereas the operator && just evaluates the first element of a logical vector. because Tukey's full logical vectors were being used by the function.The use of && in outlier() was wrong and resulted in warnings. I fixed the code by substituting &, which applies the logical operation element by element, for &&. This modification resulted in an error-free logical vector of length 10 being returned by the repaired function. To ensure that the input x is both a matrix and a number, I additionally included defensive checks at the top of the function. This assignment demonstrated how defensive programming can stop abuse and how minor logical operator errors can disrupt vectorized programs in R.
+
+
+## Module 12 Assignment – R Markdown Primer
+
+Blog Post:https://rayhankhanlis4370.blogspot.com/2026/04/assignment-12-introduction-to-r-markdown.html
+
+This assignment demonstrates how to use R Markdown to combine text, code, and output into a single document.
+
+Files:
+- module12_rmarkdown.Rmd
+- module12_rmarkdown.html
+
+Explanation:
+
+In this assignment, I created an R Markdown document that includes formatted text, LaTeX math, and executable R code. I used the mtcars dataset to generate summary statistics and a histogram. This assignment helped me understand how R Markdown supports reproducible analysis by integrating code and explanation in a single file.
